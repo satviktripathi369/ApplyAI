@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplyAI Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <div class="container glass-panel">
+        <header>
+            <div class="logo">
+                <span class="sparkle">✨</span> ApplyAI
+            </div>
+            <p class="subtitle">Your AI Co-pilot Configuration</p>
+        </header>
+
+        <main>
+            <div class="form-group">
+                <label for="provider">LLM Provider</label>
+                <div class="custom-select">
+                    <select id="provider">
+                        <option value="openai">OpenAI (GPT-4o)</option>
+                        <option value="anthropic">Anthropic (Claude 3.5 Sonnet)</option>
+                        <option value="gemini">Google (Gemini 1.5 Pro)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="apiKey">API Key</label>
+                <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off">
+                <p class="help-text">Your key is stored securely in your browser's local storage.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="resume">Master Profile (Resume)</label>
+                <textarea id="resume" placeholder="Paste your full resume text here. ApplyAI will use this to answer questions in your voice."></textarea>
+            </div>
+
+            <button id="saveBtn" class="primary-btn">
+                <span>Save Configuration</span>
+                <div class="loader hidden"></div>
+            </button>
+            <div id="statusMessage" class="status"></div>
+        </main>
+    </div>
+    <script src="options.js"></script>
+</body>
+</html>
