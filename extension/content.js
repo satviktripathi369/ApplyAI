@@ -25,8 +25,8 @@ function injectFAB() {
 
 function extractFields() {
     const fields = [];
-    // Select common input types that need filling, explicitly ignoring files
-    const inputs = document.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="file"]), textarea, select');
+    // Select common input types that need filling
+    const inputs = document.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea, select');
 
     inputs.forEach((input, index) => {
         // Ensure the input has a unique identifier for mapping later
@@ -63,9 +63,9 @@ function handleAutofill() {
     const tooltip = document.querySelector('.applyai-tooltip');
     
     // Check storage first
-    chrome.storage.local.get(['applyAiProvider', 'applyAiApiKey', 'applyAiResume'], (data) => {
-        if (!data.applyAiResume || !data.applyAiApiKey) {
-            alert('Please configure your ApplyAI Master Profile and API Key in the extension options first.');
+    chrome.storage.local.get(['applyAiProvider', 'applyAiResume'], (data) => {
+        if (!data.applyAiResume) {
+            alert('Please configure your ApplyAI Master Profile in the extension options first.');
             return;
         }
 
@@ -82,8 +82,7 @@ function handleAutofill() {
             payload: {
                 fields: fields,
                 resume_text: data.applyAiResume,
-                provider: data.applyAiProvider || 'openai',
-                api_key: data.applyAiApiKey
+                provider: data.applyAiProvider || 'openai'
             }
         }, (response) => {
             fab.classList.remove('loading');
@@ -121,7 +120,42 @@ function fillFields(answers) {
         const element = document.getElementById(id);
         if (element) {
             try {
-                if (element.type === 'file') continue; // Browser security prevents this
+                if (element.type === 'file') {
+                    if (value.startsWith('data:')) {
+                        // It's a base64 encoded file from our backend
+                        const arr = value.split(',');
+                        const mime = arr[0].match(/:(.*?);/)[1];
+                        const bstr = atob(arr[1]);
+                        let n = bstr.length;
+                        const u8arr = new Uint8Array(n);
+                        while (n--) {
+                            u8arr[n] = bstr.charCodeAt(n);
+                        }
+                        const file = new File([u8arr], "ApplyAI_Cover_Letter.docx", {type: mime});
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        element.files = dataTransfer.files;
+
+                        // Create a small preview download link so the user can check what was generated
+                        const previewLink = document.createElement('a');
+                        previewLink.href = URL.createObjectURL(file);
+                        previewLink.download = "ApplyAI_Cover_Letter.docx";
+                        previewLink.textContent = "🔍 Preview generated cover letter";
+                        previewLink.style.display = "block";
+                        previewLink.style.fontSize = "13px";
+                        previewLink.style.color = "#3b82f6";
+                        previewLink.style.marginTop = "6px";
+                        
+                        // Avoid duplicating the link if they click autofill multiple times
+                        if(element.nextSibling && element.nextSibling.textContent.includes("Preview generated")) {
+                            element.parentNode.removeChild(element.nextSibling);
+                        }
+                        element.parentNode.insertBefore(previewLink, element.nextSibling);
+                    }
+                    // Dispatch change event for file
+                    element.dispatchEvent(new Event('change', { bubbles: true }));
+                    continue;
+                }
                 
                 if (element.type === 'checkbox' || element.type === 'radio') {
                     const strVal = value.toString().toLowerCase();

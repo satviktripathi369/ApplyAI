@@ -21,6 +21,9 @@ def generate_answers(request: AutofillRequest) -> AutofillResponse:
 You will be provided with the user's resume, and a list of form fields extracted from a job application.
 Your goal is to generate the most appropriate answer for each field based on the resume.
 
+For fields with Type: "file", you must generate the text content for the file. 
+If the file field asks for a "Cover Letter" (based on Label/Name), generate a professional, tailored 3-paragraph cover letter based on the resume.
+
 Output a valid JSON object where keys are the field IDs and values are the string answers.
 If a field asks for something not in the resume (e.g. expected salary, visa status), provide a sensible default or leave it empty, but you must include every field ID in your JSON response.
 
@@ -51,8 +54,7 @@ Return ONLY a JSON object mapping each field ID to its generated answer."""
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
-        ],
-        "api_key": request.api_key
+        ]
     }
     
     if "gpt-4o" in model_name:
@@ -71,5 +73,33 @@ Return ONLY a JSON object mapping each field ID to its generated answer."""
             answers_dict = json.loads(json_match.group(1))
         else:
             raise ValueError(f"Failed to parse LLM response as JSON: {response_content}")
+
+    # Process file fields to base64 docx
+    file_field_ids = {f.id for f in request.fields if f.type == 'file'}
+    if file_field_ids:
+        try:
+            from docx import Document
+            import io
+            import base64
+            for fid in file_field_ids:
+                if fid in answers_dict and answers_dict[fid]:
+                    text_content = answers_dict[fid]
+                    doc = Document()
+                    for p in text_content.split('\n'):
+                        if p.strip():
+                            doc.add_paragraph(p.strip())
+                    buffer = io.BytesIO()
+                    doc.save(buffer)
+                    buffer.seek(0)
+                    
+                    # Save a copy locally so the user can easily check it
+                    with open("latest_cover_letter.docx", "wb") as f:
+                        f.write(buffer.read())
+                    buffer.seek(0)
+                    
+                    encoded = base64.b64encode(buffer.read()).decode('utf-8')
+                    answers_dict[fid] = f"data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,{encoded}"
+        except ImportError:
+            print("python-docx not installed, skipping docx generation.")
 
     return AutofillResponse(answers=answers_dict)

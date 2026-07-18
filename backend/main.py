@@ -2,6 +2,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from models import AutofillRequest, AutofillResponse
 from llm import generate_answers
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="ApplyAI API")
 

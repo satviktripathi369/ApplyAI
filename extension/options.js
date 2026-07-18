@@ -3,7 +3,6 @@ document.getElementById('saveBtn').addEventListener('click', saveOptions);
 
 function saveOptions() {
     const provider = document.getElementById('provider').value;
-    const apiKey = document.getElementById('apiKey').value;
     const resume = document.getElementById('resume').value;
 
     const statusEl = document.getElementById('statusMessage');
@@ -16,7 +15,6 @@ function saveOptions() {
 
     chrome.storage.local.set({
         applyAiProvider: provider,
-        applyAiApiKey: apiKey,
         applyAiResume: resume
     }, () => {
         // Mock a slight delay for better UX feel
@@ -35,12 +33,9 @@ function saveOptions() {
 }
 
 function restoreOptions() {
-    chrome.storage.local.get(['applyAiProvider', 'applyAiApiKey', 'applyAiResume'], (result) => {
+    chrome.storage.local.get(['applyAiProvider', 'applyAiResume'], (result) => {
         if (result.applyAiProvider) {
             document.getElementById('provider').value = result.applyAiProvider;
-        }
-        if (result.applyAiApiKey) {
-            document.getElementById('apiKey').value = result.applyAiApiKey;
         }
         if (result.applyAiResume) {
             document.getElementById('resume').value = result.applyAiResume;
