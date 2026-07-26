@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApplyAI Quick Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            width: 320px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0b0f19;
+            color: #f8fafc;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .open-dashboard-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 20px;
+        }
+        .open-dashboard-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(59, 130, 246, 0.6);
+        }
+        .info-card {
+            background: rgba(18, 24, 38, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .info-label { color: #94a3b8; }
+        .info-val { font-weight: 600; color: #f8fafc; }
+        .footer {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <span>✨</span> ApplyAI
+        </div>
+        <span class="badge">v1.2</span>
+    </div>
+
+    <button id="openDashboard" class="open-dashboard-btn">
+        <span>🚀 Open Full Dashboard</span>
+    </button>
+
+    <div class="info-card">
+        <div class="info-row">
+            <span class="info-label">Active Profile</span>
+            <span class="info-val" id="popActiveProfile">Master Profile</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Logged Applications</span>
+            <span class="info-val" id="popTotalApps">0</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">AI Model</span>
+            <span class="info-val" id="popProvider">Gemini Flash</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        ApplyAI Co-pilot active
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

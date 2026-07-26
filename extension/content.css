@@ -1,34 +1,45 @@
+/* ============================================
+   ApplyAI v2 — Content Styles
+   ============================================ */
+
+/* ---- FAB Container ---- */
 .applyai-fab-container {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    z-index: 999999;
-    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    z-index: 2147483647;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
 }
 
+/* ---- FAB Button ---- */
 .applyai-fab {
-    width: 60px;
-    height: 60px;
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
     background: linear-gradient(135deg, #3b82f6, #8b5cf6);
     color: white;
     border: none;
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.5);
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 22px;
+    position: relative;
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
 }
 
 .applyai-fab:hover {
     transform: scale(1.1);
-    box-shadow: 0 15px 35px rgba(59, 130, 246, 0.6);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.65);
 }
 
 .applyai-fab:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
 }
 
 .applyai-fab.loading {
@@ -40,21 +51,38 @@
     background: linear-gradient(135deg, #10b981, #34d399);
 }
 
-.applyai-tooltip {
+/* ---- Field Count Badge ---- */
+.applyai-badge {
     position: absolute;
-    bottom: 75px;
-    right: 0;
-    background: rgba(15, 23, 42, 0.9);
+    top: -4px;
+    right: -4px;
+    background: #f43f5e;
     color: white;
-    padding: 8px 16px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid white;
+}
+
+/* ---- Tooltip ---- */
+.applyai-tooltip {
+    background: rgba(15, 23, 42, 0.92);
+    color: white;
+    padding: 6px 14px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    transform: translateY(10px);
-    backdrop-filter: blur(10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    transform: translateY(4px);
+    backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -63,14 +91,302 @@
     transform: translateY(0);
 }
 
+/* ---- JD Bar (above FAB) ---- */
+.applyai-jd-bar {
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 12px;
+    width: 280px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: applyai-slide-up 0.3s ease;
+}
+
+.applyai-jd-bar label {
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.applyai-jd-bar textarea {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #f1f5f9;
+    font-size: 12px;
+    font-family: inherit;
+    padding: 8px 10px;
+    resize: none;
+    height: 80px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.applyai-jd-bar textarea:focus {
+    border-color: #3b82f6;
+}
+
+.applyai-jd-bar textarea::placeholder {
+    color: #475569;
+}
+
+.applyai-jd-bar-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.applyai-btn {
+    flex: 1;
+    padding: 7px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    font-family: inherit;
+}
+
+.applyai-btn:active {
+    transform: scale(0.97);
+}
+
+.applyai-btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+}
+
+.applyai-btn-ghost {
+    background: rgba(255,255,255,0.06);
+    color: #94a3b8;
+}
+
+/* ---- Review Panel ---- */
+.applyai-panel-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 2147483645;
+    backdrop-filter: blur(4px);
+    animation: applyai-fade-in 0.2s ease;
+}
+
+.applyai-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    max-width: 95vw;
+    height: 100vh;
+    background: #0f172a;
+    border-left: 1px solid rgba(255,255,255,0.1);
+    z-index: 2147483646;
+    display: flex;
+    flex-direction: column;
+    animation: applyai-slide-in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+}
+
+.applyai-panel-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.applyai-panel-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.applyai-panel-subtitle {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+.applyai-panel-close {
+    background: rgba(255,255,255,0.06);
+    border: none;
+    color: #94a3b8;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.applyai-panel-close:hover {
+    background: rgba(255,255,255,0.12);
+    color: white;
+}
+
+.applyai-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.applyai-panel-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.applyai-panel-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.applyai-panel-body::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+}
+
+/* ---- Review Field Card ---- */
+.applyai-field-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.2s;
+}
+
+.applyai-field-card:hover {
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.applyai-field-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.applyai-field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+/* ---- Confidence Badge ---- */
+.applyai-confidence {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+}
+
+.applyai-confidence.high {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.applyai-confidence.medium {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.applyai-confidence.low {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.applyai-field-input {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 13px;
+    font-family: inherit;
+    padding: 8px 10px;
+    width: 100%;
+    resize: vertical;
+    min-height: 36px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.applyai-field-input:focus {
+    border-color: #3b82f6;
+}
+
+/* ---- Panel Footer ---- */
+.applyai-panel-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.applyai-panel-footer .applyai-btn {
+    padding: 12px 0;
+    font-size: 14px;
+}
+
+/* ---- Confidence Dot on Page ---- */
+.applyai-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+    flex-shrink: 0;
+    cursor: help;
+}
+
+.applyai-dot.high { background: #10b981; }
+.applyai-dot.medium { background: #f59e0b; }
+.applyai-dot.low { background: #ef4444; }
+
+/* ---- Animations ---- */
 @keyframes applyai-pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 20px rgba(59, 130, 246, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
-    }
+    0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    70% { box-shadow: 0 0 0 18px rgba(59, 130, 246, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+@keyframes applyai-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes applyai-slide-in {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes applyai-slide-up {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }

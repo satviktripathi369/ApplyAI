@@ -3,48 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApplyAI Settings</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>ApplyAI Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="options.css">
 </head>
 <body>
     <div class="background-orbs">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
 
-    <div class="container glass-panel">
-        <header>
-            <div class="logo">
-                <span class="sparkle">✨</span> ApplyAI
-            </div>
-            <p class="subtitle">Your AI Co-pilot Configuration</p>
-        </header>
-
-        <main>
-            <div class="form-group">
-                <label for="provider">LLM Provider</label>
-                <div class="custom-select">
-                    <select id="provider">
-                        <option value="openai">OpenAI (GPT-4o)</option>
-                        <option value="anthropic">Anthropic (Claude 3.5 Sonnet)</option>
-                        <option value="gemini">Google (Gemini 1.5 Pro)</option>
-                    </select>
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <span class="sparkle">✨</span>
+                <div class="brand-text">
+                    <span class="brand-name">ApplyAI</span>
+                    <span class="brand-tag">Dashboard</span>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="resume">Master Profile (Resume)</label>
-                <textarea id="resume" placeholder="Paste your full resume text here. ApplyAI will use this to answer questions in your voice."></textarea>
-            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" data-tab="tracker">
+                    <span class="nav-icon">📊</span>
+                    <span>Tracker</span>
+                </button>
+                <button class="nav-item" data-tab="resumes">
+                    <span class="nav-icon">📄</span>
+                    <span>Resume Vault</span>
+                </button>
+                <button class="nav-item" data-tab="analytics">
+                    <span class="nav-icon">📈</span>
+                    <span>Analytics</span>
+                </button>
+                <button class="nav-item" data-tab="settings">
+                    <span class="nav-icon">⚙️</span>
+                    <span>Settings</span>
+                </button>
+            </nav>
 
-            <button id="saveBtn" class="primary-btn">
-                <span>Save Configuration</span>
-                <div class="loader hidden"></div>
-            </button>
-            <div id="statusMessage" class="status"></div>
+            <div class="sidebar-footer">
+                <div class="active-profile-card" id="sidebarProfileCard">
+                    <span class="profile-icon">👤</span>
+                    <div class="profile-info">
+                        <span class="profile-label">Active Resume</span>
+                        <span class="profile-name" id="sidebarActiveResumeName">Default Profile</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard View Container -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <header class="dashboard-header glass-panel">
+                <div class="header-title-wrap">
+                    <h1 id="viewTitle">Application Tracker</h1>
+                    <p id="viewSubtitle" class="subtitle">Track and manage your automated job applications</p>
+                </div>
+                <div class="header-actions">
+                    <button id="addAppBtn" class="primary-btn sm">
+                        <span>+ Add Application</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- TAB 1: TRACKER -->
+            <section id="tab-tracker" class="tab-content active">
+                <div class="tracker-controls">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="trackerSearch" placeholder="Search company or role...">
+                    </div>
+                    <div class="filter-group">
+                        <select id="trackerFilterStatus">
+                            <option value="all">All Statuses</option>
+                            <option value="Applied">Applied</option>
+                            <option value="Screening">Screening</option>
+                            <option value="Interview">Interview</option>
+                            <option value="Offer">Offer</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Kanban Board -->
+                <div class="kanban-board">
+                    <div class="kanban-column" data-status="Applied">
+                        <div class="column-header">
+                            <span class="status-indicator applied"></span>
+                            <h3>Applied</h3>
+                            <span class="column-count" id="count-Applied">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-Applied"></div>
+                    </div>
+
+                    <div class="kanban-column" data-status="Screening">
+                        <div class="column-header">
+                            <span class="status-indicator screening"></span>
+                            <h3>Screening</h3>
+                            <span class="column-count" id="count-Screening">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-Screening"></div>
+                    </div>
+
+                    <div class="kanban-column" data-status="Interview">
+                        <div class="column-header">
+                            <span class="status-indicator interview"></span>
+                            <h3>Interview</h3>
+                            <span class="column-count" id="count-Interview">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-Interview"></div>
+                    </div>
+
+                    <div class="kanban-column" data-status="Offer">
+                        <div class="column-header">
+                            <span class="status-indicator offer"></span>
+                            <h3>Offer</h3>
+                            <span class="column-count" id="count-Offer">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-Offer"></div>
+                    </div>
+
+                    <div class="kanban-column" data-status="Rejected">
+                        <div class="column-header">
+                            <span class="status-indicator rejected"></span>
+                            <h3>Rejected</h3>
+                            <span class="column-count" id="count-Rejected">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-Rejected"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: RESUME VAULT -->
+            <section id="tab-resumes" class="tab-content">
+                <div class="section-banner glass-panel">
+                    <div class="banner-text">
+                        <h2>Master Profile & Resume Vault</h2>
+                        <p>Store multiple tailored resumes and select which version ApplyAI uses to autofill applications.</p>
+                    </div>
+                    <button id="createResumeBtn" class="primary-btn sm">
+                        <span>+ New Resume Version</span>
+                    </button>
+                </div>
+
+                <div class="resume-grid" id="resumeGrid">
+                    <!-- Dynamic Resume Cards will be populated here -->
+                </div>
+            </section>
+
+            <!-- TAB 3: ANALYTICS -->
+            <section id="tab-analytics" class="tab-content">
+                <div class="metrics-grid">
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon">🚀</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="statTotalApps">0</span>
+                            <span class="metric-label">Total Applications</span>
+                        </div>
+                    </div>
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="statActivePipeline">0</span>
+                            <span class="metric-label">Active Pipelines</span>
+                        </div>
+                    </div>
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon">📊</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="statAvgMatch">0%</span>
+                            <span class="metric-label">Avg AI Match Score</span>
+                        </div>
+                    </div>
+                    <div class="metric-card glass-panel">
+                        <div class="metric-icon">⏱️</div>
+                        <div class="metric-info">
+                            <span class="metric-value" id="statTimeSaved">0 hrs</span>
+                            <span class="metric-label">Estimated Time Saved</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-charts glass-panel">
+                    <h3>Pipeline Distribution</h3>
+                    <div class="distribution-bars" id="distributionBars">
+                        <!-- Stat breakdown bars rendered dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: SETTINGS -->
+            <section id="tab-settings" class="tab-content">
+                <div class="settings-container glass-panel">
+                    <div class="form-group">
+                        <label for="provider">Default LLM Provider</label>
+                        <div class="custom-select">
+                            <select id="provider">
+                                <option value="openai">OpenAI (GPT-4o-mini)</option>
+                                <option value="anthropic">Anthropic (Claude 3.5 Haiku)</option>
+                                <option value="gemini" selected>Google (Gemini 1.5 Flash)</option>
+                            </select>
+                        </div>
+                        <p class="help-text">Selected AI model will generate tailored answers for your application forms.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Backend API Health</label>
+                        <div class="backend-status-card">
+                            <div class="status-indicator-dot" id="backendStatusDot"></div>
+                            <span id="backendStatusText">Testing connection to http://127.0.0.1:8000...</span>
+                            <button id="testBackendBtn" class="secondary-btn sm">Test Connection</button>
+                        </div>
+                    </div>
+
+                    <button id="saveSettingsBtn" class="primary-btn">
+                        <span>Save Preferences</span>
+                    </button>
+                    <div id="statusMessage" class="status"></div>
+                </div>
+            </section>
         </main>
     </div>
+
+    <!-- Modal: Add / Edit Application -->
+    <div class="modal-overlay" id="appModal">
+        <div class="modal-card glass-panel">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Job Application</h3>
+                <button class="modal-close" id="closeAppModal">&times;</button>
+            </div>
+            <form id="appForm">
+                <input type="hidden" id="appId">
+                <div class="form-group">
+                    <label for="modalCompany">Company Name</label>
+                    <input type="text" id="modalCompany" placeholder="e.g. Google, Stripe" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalRole">Role Title</label>
+                    <input type="text" id="modalRole" placeholder="e.g. Senior Full-Stack Engineer" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalUrl">Job URL</label>
+                    <input type="url" id="modalUrl" placeholder="https://careers.company.com/job/123">
+                </div>
+                <div class="form-group">
+                    <label for="modalStatus">Status</label>
+                    <select id="modalStatus">
+                        <option value="Applied">Applied</option>
+                        <option value="Screening">Screening</option>
+                        <option value="Interview">Interview</option>
+                        <option value="Offer">Offer</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn" id="cancelAppModal">Cancel</button>
+                    <button type="submit" class="primary-btn">Save Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add / Edit Resume -->
+    <div class="modal-overlay" id="resumeModal">
+        <div class="modal-card glass-panel lg">
+            <div class="modal-header">
+                <h3 id="resumeModalTitle">Add Resume Version</h3>
+                <button class="modal-close" id="closeResumeModal">&times;</button>
+            </div>
+            <form id="resumeForm">
+                <input type="hidden" id="resumeId">
+                <div class="form-group">
+                    <label for="modalResumeTitle">Profile Name</label>
+                    <input type="text" id="modalResumeTitle" placeholder="e.g. AI Engineer Profile" required>
+                </div>
+                <div class="form-group">
+                    <label for="modalResumeText">Resume Text</label>
+                    <textarea id="modalResumeText" rows="12" placeholder="Paste full resume text here..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn" id="cancelResumeModal">Cancel</button>
+                    <button type="submit" class="primary-btn">Save Resume Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="options.js"></script>
 </body>
 </html>

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Environment
+.env
+*.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+build/
+node_modules/
+
+# Misc
+*.docx
+*.log
+litellm_uuid.txt
