@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "ApplyAI",
+  "version": "1.0",
+  "description": "AI co-pilot that reads any job form and writes tailored answers in your voice.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1:8000/*",
+    "http://localhost:8000/*",
+    "<all_urls>"
+  ],
+  "action": {
+    "default_title": "ApplyAI Options"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["content.css"],
+      "js": ["content.js"]
+    }
+  ]
+}
