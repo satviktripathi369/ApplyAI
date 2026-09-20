@@ -47,7 +47,7 @@ Return ONLY a JSON object mapping each field ID to its generated answer."""
     elif "anthropic" in request.provider.lower() or "claude" in request.provider.lower():
         model_name = "claude-3-haiku-20240307"
     elif "gemini" in request.provider.lower():
-        model_name = "gemini/gemini-3.5-flash"
+        model_name = "gemini/gemini-3.6-flash"
 
     kwargs = {
         "model": model_name,

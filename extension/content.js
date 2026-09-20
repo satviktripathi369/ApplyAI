@@ -131,7 +131,7 @@ function fillFields(answers) {
                         while (n--) {
                             u8arr[n] = bstr.charCodeAt(n);
                         }
-                        const file = new File([u8arr], "ApplyAI_Cover_Letter.docx", {type: mime});
+                        const file = new File([u8arr], "Cover_Letter.docx", {type: mime});
                         const dataTransfer = new DataTransfer();
                         dataTransfer.items.add(file);
                         element.files = dataTransfer.files;
@@ -139,7 +139,7 @@ function fillFields(answers) {
                         // Create a small preview download link so the user can check what was generated
                         const previewLink = document.createElement('a');
                         previewLink.href = URL.createObjectURL(file);
-                        previewLink.download = "ApplyAI_Cover_Letter.docx";
+                        previewLink.download = "Cover_Letter.docx";
                         previewLink.textContent = "🔍 Preview generated cover letter";
                         previewLink.style.display = "block";
                         previewLink.style.fontSize = "13px";
