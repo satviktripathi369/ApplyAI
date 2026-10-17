@@ -8,32 +8,44 @@ function saveOptions() {
     const statusEl = document.getElementById('statusMessage');
     const loader = document.querySelector('.loader');
     const btnText = document.querySelector('#saveBtn span');
+    const saveButton = document.getElementById('saveBtn');
 
-    // UI feedback
-    btnText.style.display = 'none';
+    statusEl.textContent = '';
+    statusEl.className = 'status';
+    saveButton.disabled = true;
+    btnText.textContent = 'Saving profile';
+    document.querySelector('.button-arrow').classList.add('hidden');
     loader.classList.remove('hidden');
 
     chrome.storage.local.set({
         applyAiProvider: provider,
         applyAiResume: resume
     }, () => {
-        // Mock a slight delay for better UX feel
-        setTimeout(() => {
-            loader.classList.add('hidden');
-            btnText.style.display = 'block';
-            
-            statusEl.textContent = 'Configuration saved securely! ✨';
-            statusEl.className = 'status success';
-            
-            setTimeout(() => {
-                statusEl.style.opacity = '0';
-            }, 3000);
-        }, 600);
+        loader.classList.add('hidden');
+        saveButton.disabled = false;
+        btnText.textContent = 'Save profile';
+        document.querySelector('.button-arrow').classList.remove('hidden');
+
+        if (chrome.runtime.lastError) {
+            statusEl.textContent = 'Could not save. Please try again.';
+            statusEl.className = 'status error';
+            return;
+        }
+
+        statusEl.textContent = 'Profile saved.';
+        statusEl.className = 'status success';
     });
 }
 
 function restoreOptions() {
     chrome.storage.local.get(['applyAiProvider', 'applyAiResume'], (result) => {
+        if (chrome.runtime.lastError) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = 'Could not load your saved profile.';
+            statusEl.className = 'status error';
+            return;
+        }
+
         if (result.applyAiProvider) {
             document.getElementById('provider').value = result.applyAiProvider;
         }
